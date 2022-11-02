@@ -1,0 +1,42 @@
+package com.example.criptomonedas.data.database
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.example.criptomonedas.data.database.dao.BooksDao
+import com.example.criptomonedas.data.database.entities.AskDbEntity
+import com.example.criptomonedas.data.database.entities.BidDbEntity
+import com.example.criptomonedas.data.database.entities.BookDbEntity
+
+@Database(
+    entities = [
+        BookDbEntity::class,
+        AskDbEntity::class,
+        BidDbEntity::class
+    ],
+    version = 1
+)
+abstract class CryptoDatabase: RoomDatabase() {
+
+    abstract fun booksDao(): BooksDao
+
+    companion object {
+        private var INSTANCE: CryptoDatabase? = null
+
+        @Synchronized
+        fun getInstance(context: Context): CryptoDatabase {
+            if (INSTANCE == null)
+                INSTANCE = Room.databaseBuilder(
+                    context,
+                    CryptoDatabase::class.java,
+                    "cripto_db"
+                )
+                    .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
+                    .build()
+
+            return INSTANCE!!
+        }
+    }
+}
