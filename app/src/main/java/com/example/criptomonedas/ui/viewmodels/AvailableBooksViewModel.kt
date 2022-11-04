@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class AvailableBooksViewModel(application: Application): AndroidViewModel(application) {
 
-    private val cryptoDatabase = CryptoDatabase.getInstance(getApplication())
+    private val cryptoDatabase = CryptoDatabase.getInstance(application.applicationContext)
     private val booksRepository = BooksRepository(cryptoDatabase.booksDao())
 
     private val _booksList = MutableStateFlow<Resource<List<Book>>>( Resource.loading() )

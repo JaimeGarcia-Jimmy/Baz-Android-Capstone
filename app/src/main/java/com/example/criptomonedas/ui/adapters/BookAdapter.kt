@@ -19,7 +19,7 @@ class BookAdapter(
         private val binding = ItemBookBinding.bind(itemView)
 
         fun bind(book: Book) {
-            var uri = "file://android_asset/"+book.bookId.substringBefore('_')+".png"
+            var uri = "android.resource://com.example.criptomonedas/drawable/"+book.bookId.substringBefore('_')
             Glide.with(itemView.context).load(Uri.parse(uri)).into(binding.ivBook)
             binding.tvBook.text = book.bookId
         }

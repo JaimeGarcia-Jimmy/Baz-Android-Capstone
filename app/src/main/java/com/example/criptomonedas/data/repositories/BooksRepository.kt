@@ -1,5 +1,6 @@
 package com.example.criptomonedas.data.repositories
 
+import android.util.Log
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.data.api.ApiClient
 import com.example.criptomonedas.data.database.dao.BooksDao

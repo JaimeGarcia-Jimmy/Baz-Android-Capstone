@@ -50,6 +50,10 @@ class AvailableBooksFragment: Fragment() {
             }
         }
 
+        binding.swipeBooks.setOnRefreshListener {
+            viewModel.updateBooks()
+        }
+
         return binding.root
     }
 
