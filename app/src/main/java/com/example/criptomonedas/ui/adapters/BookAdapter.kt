@@ -11,7 +11,8 @@ import com.example.criptomonedas.data.entities.Book
 import com.example.criptomonedas.databinding.ItemBookBinding
 
 class BookAdapter(
-    val booksList: MutableList<Book>
+    val booksList: MutableList<Book>,
+    val onClick: (bookId: String) -> Unit
 ): RecyclerView.Adapter<BookAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -22,6 +23,9 @@ class BookAdapter(
             var uri = "android.resource://com.example.criptomonedas/drawable/"+book.bookId.substringBefore('_')
             Glide.with(itemView.context).load(Uri.parse(uri)).into(binding.ivBook)
             binding.tvBook.text = book.bookId
+            binding.root.setOnClickListener {
+                onClick(book.bookId)
+            }
         }
     }
 

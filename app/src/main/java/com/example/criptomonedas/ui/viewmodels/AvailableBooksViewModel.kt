@@ -39,4 +39,12 @@ class AvailableBooksViewModel(application: Application): AndroidViewModel(applic
             }
         }
     }
+
+    /*class PokedexViewModelFactory(
+        private val repository: PokedexRepository,
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return modelClass.getConstructor(PokedexRepository::class.java).newInstance(repository)
+        }
+    }*/
 }

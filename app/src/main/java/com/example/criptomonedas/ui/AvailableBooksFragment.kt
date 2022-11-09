@@ -23,7 +23,7 @@ class AvailableBooksFragment: Fragment() {
     private var _binding: FragmentAvailableBooksBinding? = null
     private val binding: FragmentAvailableBooksBinding get() = _binding!!
     private val viewModel: AvailableBooksViewModel by viewModels<AvailableBooksViewModel>()
-    private val adapter = BookAdapter(mutableListOf())
+    private val adapter = BookAdapter( mutableListOf() ){ bookId -> openBookDetail(bookId) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,16 +58,21 @@ class AvailableBooksFragment: Fragment() {
     }
 
     private fun openBookDetail(bookId: String) {
-        findNavController().navigate(
+        /*findNavController().navigate(
             R.id.action_availableBooksFragment_to_bookDetailFragment,
             Bundle().apply {
                 putString("bookId", bookId)
             }
-        )
+        )*/
+
+        val action =
+            AvailableBooksFragmentDirections
+                .actionAvailableBooksFragmentToBookDetailFragment(bookId)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        //_binding = null
     }
 }
