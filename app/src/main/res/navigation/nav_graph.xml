@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/availableBooksFragment">
+
+    <fragment
+        android:id="@+id/availableBooksFragment"
+        android:name="com.example.criptomonedas.ui.AvailableBooksFragment"
+        android:label="AvailableBooksFragment"
+        tools:layout="@layout/fragment_available_books">
+        <action
+            android:id="@+id/action_availableBooksFragment_to_bookDetailFragment"
+            app:destination="@+id/bookDetailFragment">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookDetailFragment"
+        android:name="com.example.criptomonedas.ui.BookDetailFragment"
+        android:label="BookDetailFragment"
+        tools:layout="@layout/fragment_book_detail">
+        <argument
+            android:name="bookId"
+            app:argType="string"
+            app:nullable="true"
+            />
+    </fragment>
+
+</navigation>
