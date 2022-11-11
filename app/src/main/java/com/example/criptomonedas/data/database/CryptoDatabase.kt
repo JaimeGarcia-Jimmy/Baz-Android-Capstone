@@ -20,23 +20,4 @@ import com.example.criptomonedas.data.database.entities.BookDbEntity
 abstract class CryptoDatabase: RoomDatabase() {
 
     abstract fun booksDao(): BooksDao
-
-    companion object {
-        private var INSTANCE: CryptoDatabase? = null
-
-        @Synchronized
-        fun getInstance(context: Context): CryptoDatabase {
-            if (INSTANCE == null)
-                INSTANCE = Room.databaseBuilder(
-                    context,
-                    CryptoDatabase::class.java,
-                    "cripto_db"
-                )
-                    .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
-                    .build()
-
-            return INSTANCE!!
-        }
-    }
 }

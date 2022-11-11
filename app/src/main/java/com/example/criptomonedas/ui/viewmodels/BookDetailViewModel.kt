@@ -2,6 +2,7 @@ package com.example.criptomonedas.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.data.database.CryptoDatabase
@@ -9,15 +10,17 @@ import com.example.criptomonedas.data.entities.Ask
 import com.example.criptomonedas.data.entities.Bid
 import com.example.criptomonedas.data.entities.Book
 import com.example.criptomonedas.data.repositories.BookOrdersRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BookDetailViewModel(application: Application): AndroidViewModel(application) {
-
-    private val cryptoDatabase = CryptoDatabase.getInstance(getApplication())
-    private val bookOrdersRepository = BookOrdersRepository(cryptoDatabase.booksDao())
+@HiltViewModel
+class BookDetailViewModel @Inject constructor(
+    private val bookOrdersRepository: BookOrdersRepository
+): ViewModel() {
 
     private var _bookId: String = ""
 

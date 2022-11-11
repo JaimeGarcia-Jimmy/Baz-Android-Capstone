@@ -18,8 +18,8 @@ class BidAdapter(
         private val binding = ItemBidBinding.bind(itemView)
 
         fun bind(bid: Bid) {
-            binding.tvBidPrice.text = "Price: ${bid.price.toString()}"
-            binding.tvBidAmount.text = "Amount: ${bid.amount.toString()}"
+            binding.tvBidPrice.text = "Price: ${bid.price}"
+            binding.tvBidAmount.text = "Amount: ${bid.amount}"
         }
     }
 

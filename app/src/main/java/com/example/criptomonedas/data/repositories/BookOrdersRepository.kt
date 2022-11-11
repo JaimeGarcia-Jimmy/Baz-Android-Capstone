@@ -2,16 +2,23 @@ package com.example.criptomonedas.data.repositories
 
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.data.api.ApiClient
+import com.example.criptomonedas.data.api.services.BooksService
 import com.example.criptomonedas.data.database.dao.BooksDao
 import com.example.criptomonedas.data.entities.Ask
 import com.example.criptomonedas.data.entities.Bid
 import com.example.criptomonedas.data.entities.Book
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class BookOrdersRepository(
-    private val booksDao: BooksDao
+class BookOrdersRepository @Inject constructor(
+    private val booksDao: BooksDao,
+    private val booksService: BooksService
 ) {
 
     fun getBookById(bookId: String): Flow<Resource<Book>> = flow {
@@ -34,7 +41,7 @@ class BookOrdersRepository(
     suspend fun updateBook(bookId: String) =
         withContext(Dispatchers.IO) {
 
-            val remoteSourceBook = ApiClient.booksService().doGetBookByTickerRequest(bookId).payload
+            val remoteSourceBook = booksService.doGetBookByTickerRequest(bookId).payload
 
             booksDao.updateBook(
                 remoteSourceBook.toDbEntity()
@@ -45,8 +52,8 @@ class BookOrdersRepository(
 
         emit(Resource.loading())
 
-        val dbFlow: Flow<Resource<List<Ask>>> = booksDao.getAsksByBookFlow(bookId).map {
-            Resource.success(it.map { it.toEntity() })
+        val dbFlow: Flow<Resource<List<Ask>>> = booksDao.getAsksByBookFlow(bookId).map { asksDbList ->
+            Resource.success(asksDbList.map { it.toEntity() })
         }
 
         try {
@@ -61,7 +68,7 @@ class BookOrdersRepository(
     suspend fun updateAsks(bookId: String) =
         withContext(Dispatchers.IO) {
 
-            val remoteSourceAsksList = ApiClient.booksService().doGetOrdersByBookRequest(bookId).payload.asks
+            val remoteSourceAsksList = booksService.doGetOrdersByBookRequest(bookId).payload.asks
 
             booksDao.deleteAndInsertAsksByBook(
                 bookId,
@@ -73,8 +80,8 @@ class BookOrdersRepository(
 
         emit(Resource.loading())
 
-        val dbFlow: Flow<Resource<List<Bid>>> = booksDao.getBidsByBookFlow(bookId).map {
-            Resource.success(it.map { it.toEntity() })
+        val dbFlow: Flow<Resource<List<Bid>>> = booksDao.getBidsByBookFlow(bookId).map { bidsDbList ->
+            Resource.success(bidsDbList.map { it.toEntity() })
         }
 
         try {
@@ -89,7 +96,7 @@ class BookOrdersRepository(
     suspend fun updateBids(bookId: String) =
         withContext(Dispatchers.IO) {
 
-            val remoteSourceBidsList = ApiClient.booksService().doGetOrdersByBookRequest(bookId).payload.bids
+            val remoteSourceBidsList = booksService.doGetOrdersByBookRequest(bookId).payload.bids
 
             booksDao.deleteAndInsertBidsByBook(
                 bookId,

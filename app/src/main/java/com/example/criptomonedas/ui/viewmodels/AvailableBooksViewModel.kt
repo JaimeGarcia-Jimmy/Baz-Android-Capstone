@@ -2,20 +2,23 @@ package com.example.criptomonedas.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.data.database.CryptoDatabase
 import com.example.criptomonedas.data.entities.Book
 import com.example.criptomonedas.data.repositories.BooksRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AvailableBooksViewModel(application: Application): AndroidViewModel(application) {
-
-    private val cryptoDatabase = CryptoDatabase.getInstance(application.applicationContext)
-    private val booksRepository = BooksRepository(cryptoDatabase.booksDao())
+@HiltViewModel
+class AvailableBooksViewModel @Inject constructor(
+    private val booksRepository: BooksRepository
+): ViewModel() {
 
     private val _booksList = MutableStateFlow<Resource<List<Book>>>( Resource.loading() )
     val booksList: StateFlow<Resource<List<Book>>> = _booksList

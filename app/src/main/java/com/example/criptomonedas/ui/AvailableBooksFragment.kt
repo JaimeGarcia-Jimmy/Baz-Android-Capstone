@@ -15,9 +15,11 @@ import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.databinding.FragmentAvailableBooksBinding
 import com.example.criptomonedas.ui.adapters.BookAdapter
 import com.example.criptomonedas.ui.viewmodels.AvailableBooksViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class AvailableBooksFragment: Fragment() {
 
     private var _binding: FragmentAvailableBooksBinding? = null
@@ -32,7 +34,7 @@ class AvailableBooksFragment: Fragment() {
     ): View? {
         _binding = FragmentAvailableBooksBinding.inflate(inflater, container, false)
         binding.rvBooks.adapter = adapter
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.booksList.collect() {
                 binding.swipeBooks.isRefreshing = false
 
@@ -73,6 +75,6 @@ class AvailableBooksFragment: Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        //_binding = null
+        _binding = null
     }
 }
