@@ -16,9 +16,11 @@ import com.example.criptomonedas.databinding.FragmentBookDetailBinding
 import com.example.criptomonedas.ui.adapters.AskAdapter
 import com.example.criptomonedas.ui.adapters.BidAdapter
 import com.example.criptomonedas.ui.viewmodels.BookDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class BookDetailFragment: Fragment() {
 
     private var _binding: FragmentBookDetailBinding? = null
@@ -34,7 +36,7 @@ class BookDetailFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentBookDetailBinding.inflate(inflater, container, false)
-        var uri = "android.resource://com.example.criptomonedas/drawable/"+args.bookId?.substringBefore('_')
+        val uri = "android.resource://com.example.criptomonedas/drawable/"+args.bookId?.substringBefore('_')
         Glide.with(requireActivity()).load(Uri.parse(uri)).into(binding.ivBookDetail)
         binding.tvBookId.text = args.bookId
         binding.rvAsks.adapter = askAdapter
@@ -44,7 +46,7 @@ class BookDetailFragment: Fragment() {
         viewModel.getBookById(args.bookId!!)
 
         //Collect Book Details
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.book.collect() {
                 when(it) {
                     is Resource.Error -> Toast.makeText(
@@ -52,9 +54,9 @@ class BookDetailFragment: Fragment() {
                     ).show()
                     is Resource.Loading -> null
                     is Resource.Success -> {
-                        binding.tvLastValue.text = "Last: ${it.data.last.toString()}"
-                        binding.tvHighValue.text = "High: ${it.data.high.toString()}"
-                        binding.tvLowValue.text = "Low: ${it.data.low.toString()}"
+                        binding.tvLastValue.text = "Last: ${it.data.last}"
+                        binding.tvHighValue.text = "High: ${it.data.high}"
+                        binding.tvLowValue.text = "Low: ${it.data.low}"
                     }
                 }
 
@@ -62,7 +64,7 @@ class BookDetailFragment: Fragment() {
         }
 
         //Collect Book Asks
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.asks.collect() {
                 when(it) {
                     is Resource.Error -> Toast.makeText(
@@ -79,7 +81,7 @@ class BookDetailFragment: Fragment() {
         }
 
         //Collect Book Bids
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.bids.collect() {
                 when(it) {
                     is Resource.Error -> Toast.makeText(
@@ -102,7 +104,7 @@ class BookDetailFragment: Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        //_binding = null
+        _binding = null
     }
 
 }
