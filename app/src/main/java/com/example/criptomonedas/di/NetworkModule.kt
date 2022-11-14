@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,11 +27,16 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(retrofitClient: OkHttpClient): Retrofit {
+    fun provideRxJavaAdapter(): RxJava3CallAdapterFactory = RxJava3CallAdapterFactory.create()
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(retrofitClient: OkHttpClient, rxJava3CallAdapterFactory: RxJava3CallAdapterFactory): Retrofit {
         return Retrofit.Builder()
             .client(retrofitClient)
             .baseUrl("https://api.bitso.com/v3/")
             .addConverterFactory( GsonConverterFactory.create() )
+            .addCallAdapterFactory(rxJava3CallAdapterFactory)
             .build()
     }
 
