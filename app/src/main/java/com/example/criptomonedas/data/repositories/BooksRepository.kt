@@ -1,10 +1,10 @@
 package com.example.criptomonedas.data.repositories
 
-import android.util.Log
 import com.example.criptomonedas.data.Resource
-import com.example.criptomonedas.data.api.ApiClient
 import com.example.criptomonedas.data.api.services.BooksService
 import com.example.criptomonedas.data.database.dao.BooksDao
+import com.example.criptomonedas.data.datasources.BooksLocalDataSource
+import com.example.criptomonedas.data.datasources.BooksRemoteDataSource
 import com.example.criptomonedas.data.entities.Book
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -16,18 +16,17 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class BooksRepository @Inject constructor(
-    private val booksDao: BooksDao,
-    private val booksService: BooksService
+    private val booksLocalDataSource: BooksLocalDataSource,
+    private val booksRemoteDataSource: BooksRemoteDataSource
 ) {
 
     fun getBooks(): Flow<Resource<List<Book>>> =
         flow {
-
-            //Al iniciar la vista se emite un recuros de tipo cargando
+            // Al iniciar la vista se emite un recuros de tipo cargando
             emit(Resource.loading())
 
-            //Se inicia el flujo de la base de datos
-            val dbFlow: Flow<Resource<List<Book>>> = booksDao.getAllBooksFlow().map { booksDbList ->
+            // Se inicia el flujo de la base de datos
+            val dbFlow: Flow<Resource<List<Book>>> = booksLocalDataSource.getAllBooksFlow().map { booksDbList ->
                 Resource.success(booksDbList.map { it.toEntity() })
             }
 
@@ -42,10 +41,10 @@ class BooksRepository @Inject constructor(
 
     suspend fun updateBooks() =
         withContext(Dispatchers.IO) {
-            //Peticion al api remoto
-            val remoteSourceBooks = booksService.doGetAvailableBooksRequest().payload
-            //Actualizar la base de datos local con informacion remota
-            booksDao.insertAllBooks(
+            // Peticion al api remoto
+            val remoteSourceBooks = booksRemoteDataSource.getAvailableBooks().payload
+            // Actualizar la base de datos local con informacion remota
+            booksLocalDataSource.insertAllBooks(
                 remoteSourceBooks.map {
                     it.toDbEntity()
                 }

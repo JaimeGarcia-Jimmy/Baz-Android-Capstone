@@ -1,12 +1,12 @@
 package com.example.criptomonedas.di
 
-import com.example.criptomonedas.data.api.ApiClient
 import com.example.criptomonedas.data.api.LoggingInterceptor
 import com.example.criptomonedas.data.api.services.BooksService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,13 +24,17 @@ object NetworkModule {
             .build()
     }
 
+    @Provides
+    @Singleton
+    fun provideRxAdapter(): RxJava3CallAdapterFactory = RxJava3CallAdapterFactory.create()
+
     @Singleton
     @Provides
     fun provideRetrofit(retrofitClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .client(retrofitClient)
             .baseUrl("https://api.bitso.com/v3/")
-            .addConverterFactory( GsonConverterFactory.create() )
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 

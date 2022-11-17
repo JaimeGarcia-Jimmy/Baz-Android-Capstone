@@ -21,14 +21,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class BookDetailFragment: Fragment() {
+class BookDetailFragment : Fragment() {
 
     private var _binding: FragmentBookDetailBinding? = null
     private val binding: FragmentBookDetailBinding get() = _binding!!
     private val args: BookDetailFragmentArgs by navArgs()
     private val viewModel: BookDetailViewModel by viewModels()
-    private val askAdapter = AskAdapter( mutableListOf() )
-    private val bidAdapter = BidAdapter( mutableListOf() )
+    private val askAdapter = AskAdapter(mutableListOf())
+    private val bidAdapter = BidAdapter(mutableListOf())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,21 +36,23 @@ class BookDetailFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentBookDetailBinding.inflate(inflater, container, false)
-        val uri = "android.resource://com.example.criptomonedas/drawable/"+args.bookId?.substringBefore('_')
+        val uri = "android.resource://com.example.criptomonedas/drawable/" + args.bookId?.substringBefore('_')
         Glide.with(requireActivity()).load(Uri.parse(uri)).into(binding.ivBookDetail)
         binding.tvBookId.text = args.bookId
         binding.rvAsks.adapter = askAdapter
         binding.rvBids.adapter = bidAdapter
 
-        //Start viewmodel flows
+        // Start viewmodel flows
         viewModel.getBookById(args.bookId!!)
 
-        //Collect Book Details
+        // Collect Book Details
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.book.collect() {
-                when(it) {
+                when (it) {
                     is Resource.Error -> Toast.makeText(
-                        activity, it.message, Toast.LENGTH_LONG
+                        activity,
+                        it.message,
+                        Toast.LENGTH_LONG
                     ).show()
                     is Resource.Loading -> null
                     is Resource.Success -> {
@@ -59,16 +61,17 @@ class BookDetailFragment: Fragment() {
                         binding.tvLowValue.text = "Low: ${it.data.low}"
                     }
                 }
-
             }
         }
 
-        //Collect Book Asks
+        // Collect Book Asks
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.asks.collect() {
-                when(it) {
+                when (it) {
                     is Resource.Error -> Toast.makeText(
-                        activity, it.message, Toast.LENGTH_LONG
+                        activity,
+                        it.message,
+                        Toast.LENGTH_LONG
                     ).show()
                     is Resource.Loading -> null
                     is Resource.Success -> {
@@ -80,12 +83,14 @@ class BookDetailFragment: Fragment() {
             }
         }
 
-        //Collect Book Bids
+        // Collect Book Bids
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.bids.collect() {
-                when(it) {
+                when (it) {
                     is Resource.Error -> Toast.makeText(
-                        activity, it.message, Toast.LENGTH_LONG
+                        activity,
+                        it.message,
+                        Toast.LENGTH_LONG
                     ).show()
                     is Resource.Loading -> null
                     is Resource.Success -> {
@@ -97,8 +102,6 @@ class BookDetailFragment: Fragment() {
             }
         }
 
-
-
         return binding.root
     }
 
@@ -106,5 +109,4 @@ class BookDetailFragment: Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

@@ -10,9 +10,9 @@ import com.example.criptomonedas.databinding.ItemAskBinding
 
 class AskAdapter(
     val asksList: MutableList<Ask>
-): RecyclerView.Adapter<AskAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<AskAdapter.ViewHolder>() {
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = ItemAskBinding.bind(itemView)
 

@@ -5,15 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.criptomonedas.R
-import com.example.criptomonedas.data.entities.Ask
 import com.example.criptomonedas.data.entities.Bid
 import com.example.criptomonedas.databinding.ItemBidBinding
 
 class BidAdapter(
     val bidsList: MutableList<Bid>
-): RecyclerView.Adapter<BidAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<BidAdapter.ViewHolder>() {
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val binding = ItemBidBinding.bind(itemView)
 

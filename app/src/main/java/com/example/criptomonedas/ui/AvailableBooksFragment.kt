@@ -9,8 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.criptomonedas.R
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.databinding.FragmentAvailableBooksBinding
 import com.example.criptomonedas.ui.adapters.BookAdapter
@@ -20,12 +18,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AvailableBooksFragment: Fragment() {
+class AvailableBooksFragment : Fragment() {
 
     private var _binding: FragmentAvailableBooksBinding? = null
     private val binding: FragmentAvailableBooksBinding get() = _binding!!
     private val viewModel: AvailableBooksViewModel by viewModels<AvailableBooksViewModel>()
-    private val adapter = BookAdapter( mutableListOf() ){ bookId -> openBookDetail(bookId) }
+    private val adapter = BookAdapter(mutableListOf()) { bookId -> openBookDetail(bookId) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,9 +36,11 @@ class AvailableBooksFragment: Fragment() {
             viewModel.booksList.collect() {
                 binding.swipeBooks.isRefreshing = false
 
-                when(it) {
+                when (it) {
                     is Resource.Error -> Toast.makeText(
-                        activity, it.message, Toast.LENGTH_LONG
+                        activity,
+                        it.message,
+                        Toast.LENGTH_LONG
                     ).show()
                     is Resource.Loading -> binding.swipeBooks.isRefreshing = true
                     is Resource.Success -> {
@@ -60,12 +60,6 @@ class AvailableBooksFragment: Fragment() {
     }
 
     private fun openBookDetail(bookId: String) {
-        /*findNavController().navigate(
-            R.id.action_availableBooksFragment_to_bookDetailFragment,
-            Bundle().apply {
-                putString("bookId", bookId)
-            }
-        )*/
 
         val action =
             AvailableBooksFragmentDirections

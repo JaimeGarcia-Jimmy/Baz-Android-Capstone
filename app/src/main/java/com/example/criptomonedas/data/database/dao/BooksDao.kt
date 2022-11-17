@@ -30,7 +30,7 @@ interface BooksDao {
     @Delete
     fun deleteBook(book: BookDbEntity)
 
-    @Insert( onConflict = OnConflictStrategy.REPLACE )
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllBooks(books: List<BookDbEntity>)
 
     @Update
@@ -62,15 +62,15 @@ interface BooksDao {
 
     @Query(
         "SELECT * FROM books " +
-                "JOIN asks ON books.book = asks.book " +
-                "WHERE books.book = :book_id"
+            "JOIN asks ON books.book = asks.book " +
+            "WHERE books.book = :book_id"
     )
     fun loadBookAndAsks(book_id: String): Map<BookDbEntity, List<AskDbEntity>>
 
     @Query(
         "SELECT * FROM books " +
-                "JOIN bids ON books.book = bids.book " +
-                "WHERE books.book = :book_id"
+            "JOIN bids ON books.book = bids.book " +
+            "WHERE books.book = :book_id"
     )
     fun loadBookAndBids(book_id: String): Map<BookDbEntity, List<BidDbEntity>>
 

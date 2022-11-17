@@ -1,11 +1,8 @@
 package com.example.criptomonedas.ui.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.criptomonedas.data.Resource
-import com.example.criptomonedas.data.database.CryptoDatabase
 import com.example.criptomonedas.data.entities.Book
 import com.example.criptomonedas.data.repositories.BooksRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,9 +15,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AvailableBooksViewModel @Inject constructor(
     private val booksRepository: BooksRepository
-): ViewModel() {
+) : ViewModel() {
 
-    private val _booksList = MutableStateFlow<Resource<List<Book>>>( Resource.loading() )
+    private val _booksList = MutableStateFlow<Resource<List<Book>>>(Resource.loading())
     val booksList: StateFlow<Resource<List<Book>>> = _booksList
 
     fun updateBooks() {
@@ -43,11 +40,5 @@ class AvailableBooksViewModel @Inject constructor(
         }
     }
 
-    /*class PokedexViewModelFactory(
-        private val repository: PokedexRepository,
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return modelClass.getConstructor(PokedexRepository::class.java).newInstance(repository)
-        }
-    }*/
+
 }

@@ -1,7 +1,6 @@
 package com.example.criptomonedas.data.repositories
 
 import com.example.criptomonedas.data.Resource
-import com.example.criptomonedas.data.api.ApiClient
 import com.example.criptomonedas.data.api.services.BooksService
 import com.example.criptomonedas.data.database.dao.BooksDao
 import com.example.criptomonedas.data.entities.Ask
@@ -22,7 +21,6 @@ class BookOrdersRepository @Inject constructor(
 ) {
 
     fun getBookById(bookId: String): Flow<Resource<Book>> = flow {
-
         emit(Resource.loading())
 
         val dbFlow: Flow<Resource<Book>> = booksDao.getBookByIdFlow(bookId).map {
@@ -40,7 +38,6 @@ class BookOrdersRepository @Inject constructor(
 
     suspend fun updateBook(bookId: String) =
         withContext(Dispatchers.IO) {
-
             val remoteSourceBook = booksService.doGetBookByTickerRequest(bookId).payload
 
             booksDao.updateBook(
@@ -49,7 +46,6 @@ class BookOrdersRepository @Inject constructor(
         }
 
     fun getAsksByBook(bookId: String): Flow<Resource<List<Ask>>> = flow {
-
         emit(Resource.loading())
 
         val dbFlow: Flow<Resource<List<Ask>>> = booksDao.getAsksByBookFlow(bookId).map { asksDbList ->
@@ -67,7 +63,6 @@ class BookOrdersRepository @Inject constructor(
 
     suspend fun updateAsks(bookId: String) =
         withContext(Dispatchers.IO) {
-
             val remoteSourceAsksList = booksService.doGetOrdersByBookRequest(bookId).payload.asks
 
             booksDao.deleteAndInsertAsksByBook(
@@ -77,7 +72,6 @@ class BookOrdersRepository @Inject constructor(
         }
 
     fun getBidsByBook(bookId: String): Flow<Resource<List<Bid>>> = flow {
-
         emit(Resource.loading())
 
         val dbFlow: Flow<Resource<List<Bid>>> = booksDao.getBidsByBookFlow(bookId).map { bidsDbList ->
@@ -95,7 +89,6 @@ class BookOrdersRepository @Inject constructor(
 
     suspend fun updateBids(bookId: String) =
         withContext(Dispatchers.IO) {
-
             val remoteSourceBidsList = booksService.doGetOrdersByBookRequest(bookId).payload.bids
 
             booksDao.deleteAndInsertBidsByBook(
