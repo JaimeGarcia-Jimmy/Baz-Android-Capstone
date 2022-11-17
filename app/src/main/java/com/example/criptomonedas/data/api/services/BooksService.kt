@@ -20,4 +20,7 @@ interface BooksService {
 
     @GET("available_books")
     fun doGetAvailableBooksRequestObservable(): Observable<AvailableBooksResponseDto>
+
+    @GET("ticker")
+    fun doGetBookByTickerRequestObservable(@Query("book") book: String): Observable<TickerResponseDto>
 }

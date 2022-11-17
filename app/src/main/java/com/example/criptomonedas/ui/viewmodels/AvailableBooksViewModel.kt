@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.data.entities.Book
 import com.example.criptomonedas.data.repositories.BooksRepository
+import com.example.criptomonedas.data.repositories.BooksRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,11 +31,12 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(retrofitClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(retrofitClient: OkHttpClient, rxJava3CallAdapterFactory: RxJava3CallAdapterFactory): Retrofit {
         return Retrofit.Builder()
             .client(retrofitClient)
             .baseUrl("https://api.bitso.com/v3/")
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(rxJava3CallAdapterFactory)
             .build()
     }
 
@@ -43,4 +45,8 @@ object NetworkModule {
     fun provideBooksService(retrofit: Retrofit): BooksService {
         return retrofit.create(BooksService::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun providesCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 }
