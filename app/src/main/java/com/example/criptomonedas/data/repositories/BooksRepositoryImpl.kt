@@ -4,6 +4,7 @@ import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.data.datasources.BooksLocalDataSource
 import com.example.criptomonedas.data.datasources.BooksRemoteDataSource
 import com.example.criptomonedas.data.entities.Book
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 class BooksRepositoryImpl @Inject constructor(
     private val booksLocalDataSource: BooksLocalDataSource,
-    private val booksRemoteDataSource: BooksRemoteDataSource
+    private val booksRemoteDataSource: BooksRemoteDataSource,
+    private val ioDispatcher: CoroutineDispatcher
 ): BooksRepository {
 
     override fun getBooks(): Flow<Resource<List<Book>>> =
@@ -35,10 +37,10 @@ class BooksRepositoryImpl @Inject constructor(
             }
 
             emitAll(dbFlow)
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(ioDispatcher)
 
     override suspend fun updateBooks() =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             // Peticion al api remoto
             val remoteSourceBooks = booksRemoteDataSource.getAvailableBooks().payload
             // Actualizar la base de datos local con informacion remota

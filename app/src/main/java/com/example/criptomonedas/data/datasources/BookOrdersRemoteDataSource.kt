@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Observable
 
 interface BookOrdersRemoteDataSource {
 
-    suspend fun getBookByTickerObservable(bookId: String): Observable<TickerResponseDto>
+    fun getBookByTickerObservable(bookId: String): Observable<TickerResponseDto>
 
     suspend fun getOrdersByBook(bookId: String): OrderBookResponseDto
 }

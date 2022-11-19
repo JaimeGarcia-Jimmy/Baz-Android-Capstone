@@ -7,9 +7,9 @@ import com.example.criptomonedas.data.datasources.BookOrdersRemoteDataSource
 import com.example.criptomonedas.data.entities.Ask
 import com.example.criptomonedas.data.entities.Bid
 import com.example.criptomonedas.data.entities.Book
+import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -21,7 +21,10 @@ import javax.inject.Inject
 class BookOrdersRepositoryImpl @Inject constructor(
     private val bookOrdersLocalDatasource: BookOrdersLocalDatasource,
     private val bookOrdersRemoteDataSource: BookOrdersRemoteDataSource,
-    private val compositeDisposable: CompositeDisposable
+    private val compositeDisposable: CompositeDisposable,
+    private val ioDispatcher: CoroutineDispatcher,
+    private val subscribeIoScheduler: Scheduler,
+    private val observeIoScheduler: Scheduler,
 ): BookOrdersRepository {
 
     override fun getBookById(bookId: String): Flow<Resource<Book>> = flow {
@@ -39,16 +42,15 @@ class BookOrdersRepositoryImpl @Inject constructor(
         }
 
         emitAll(dbFlow)
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(ioDispatcher)
 
-    override suspend fun updateBook(bookId: String) =
-        withContext(Dispatchers.IO) {
-            val disposable = bookOrdersRemoteDataSource.getBookByTickerObservable(bookId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(::handleGetBookByTickerSuccess, ::handleGetBookByTicketError)
-            compositeDisposable.add(disposable)
-        }
+    override fun updateBook(bookId: String) {
+        val disposable = bookOrdersRemoteDataSource.getBookByTickerObservable(bookId)
+            .subscribeOn(subscribeIoScheduler)
+            .observeOn(observeIoScheduler)
+            .subscribe(::handleGetBookByTickerSuccess, ::handleGetBookByTicketError)
+        compositeDisposable.add(disposable)
+    }
 
     override fun handleGetBookByTickerSuccess(response: TickerResponseDto) {
         val remoteSourceBook = response.payload
@@ -77,10 +79,10 @@ class BookOrdersRepositoryImpl @Inject constructor(
         }
 
         emitAll(dbFlow)
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(ioDispatcher)
 
     override suspend fun updateAsks(bookId: String) =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val remoteSourceAsksList = bookOrdersRemoteDataSource.getOrdersByBook(bookId).payload.asks
 
             bookOrdersLocalDatasource.deleteAndInsertAsksByBook(
@@ -103,10 +105,10 @@ class BookOrdersRepositoryImpl @Inject constructor(
         }
 
         emitAll(dbFlow)
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(ioDispatcher)
 
     override suspend fun updateBids(bookId: String) =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val remoteSourceBidsList = bookOrdersRemoteDataSource.getOrdersByBook(bookId).payload.bids
 
             bookOrdersLocalDatasource.deleteAndInsertBidsByBook(

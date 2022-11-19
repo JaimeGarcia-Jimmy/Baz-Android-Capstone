@@ -11,7 +11,7 @@ interface BookOrdersRepository {
 
     fun getBookById(bookId: String): Flow<Resource<Book>>
 
-    suspend fun updateBook(bookId: String): Boolean
+    fun updateBook(bookId: String): Unit
 
     fun handleGetBookByTickerSuccess(response: TickerResponseDto): Unit
 

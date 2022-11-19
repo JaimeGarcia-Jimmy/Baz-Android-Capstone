@@ -9,6 +9,8 @@ import com.example.criptomonedas.data.entities.Book
 import com.example.criptomonedas.data.repositories.BookOrdersRepository
 import com.example.criptomonedas.data.repositories.BookOrdersRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookDetailViewModel @Inject constructor(
-    private val bookOrdersRepository: BookOrdersRepository
+    private val bookOrdersRepository: BookOrdersRepository,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private var _bookId: String = ""
@@ -33,19 +36,19 @@ class BookDetailViewModel @Inject constructor(
     fun getBookById(bookId: String) {
         _bookId = bookId
 
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             bookOrdersRepository.getBookById(bookId).collect() {
                 _book.value = it
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             bookOrdersRepository.getAsksByBook(bookId).collect() {
                 _asks.value = it
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             bookOrdersRepository.getBidsByBook(bookId).collect() {
                 _bids.value = it
             }
@@ -53,7 +56,7 @@ class BookDetailViewModel @Inject constructor(
     }
 
     fun updateBook() {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             _asks.value = Resource.loading()
 
             try {

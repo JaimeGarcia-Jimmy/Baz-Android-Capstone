@@ -9,7 +9,7 @@ import javax.inject.Inject
 class BookOrdersRemoteDataSourceImpl @Inject constructor(
     private val booksService: BooksService
 ): BookOrdersRemoteDataSource {
-    override suspend fun getBookByTickerObservable(bookId: String): Observable<TickerResponseDto> {
+    override fun getBookByTickerObservable(bookId: String): Observable<TickerResponseDto> {
         return booksService.doGetBookByTickerRequestObservable(bookId)
     }
 
