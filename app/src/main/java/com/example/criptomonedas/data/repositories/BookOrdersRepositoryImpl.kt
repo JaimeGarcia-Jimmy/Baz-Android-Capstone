@@ -1,5 +1,7 @@
 package com.example.criptomonedas.data.repositories
 
+import android.content.Context
+import com.example.criptomonedas.R
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.data.api.dto.TickerResponseDto
 import com.example.criptomonedas.data.datasources.BookOrdersLocalDatasource
@@ -7,6 +9,7 @@ import com.example.criptomonedas.data.datasources.BookOrdersRemoteDataSource
 import com.example.criptomonedas.data.entities.Ask
 import com.example.criptomonedas.data.entities.Bid
 import com.example.criptomonedas.data.entities.Book
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineDispatcher
@@ -25,6 +28,7 @@ class BookOrdersRepositoryImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher,
     private val subscribeIoScheduler: Scheduler,
     private val observeIoScheduler: Scheduler,
+    @ApplicationContext private val appContext: Context
 ): BookOrdersRepository {
 
     override fun getBookById(bookId: String): Flow<Resource<Book>> = flow {
@@ -37,7 +41,7 @@ class BookOrdersRepositoryImpl @Inject constructor(
         try {
             updateBook(bookId)
         } catch (e: Exception) {
-            emit(Resource.error("La peticion fallo", e))
+            emit(Resource.error(appContext.getString(R.string.http_request_error_message), e))
             e.printStackTrace()
         }
 
@@ -75,7 +79,7 @@ class BookOrdersRepositoryImpl @Inject constructor(
         try {
             updateAsks(bookId)
         } catch (e: Exception) {
-            emit(Resource.error("La peticion fallo", e))
+            emit(Resource.error(appContext.getString(R.string.http_request_error_message), e))
         }
 
         emitAll(dbFlow)
@@ -101,7 +105,7 @@ class BookOrdersRepositoryImpl @Inject constructor(
         try {
             updateBids(bookId)
         } catch (e: Exception) {
-            emit(Resource.error("La peticion fallo", e))
+            emit(Resource.error(appContext.getString(R.string.http_request_error_message), e))
         }
 
         emitAll(dbFlow)

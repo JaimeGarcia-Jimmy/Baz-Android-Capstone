@@ -1,9 +1,12 @@
 package com.example.criptomonedas.data.repositories
 
+import android.content.Context
+import com.example.criptomonedas.R
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.data.datasources.BooksLocalDataSource
 import com.example.criptomonedas.data.datasources.BooksRemoteDataSource
 import com.example.criptomonedas.data.entities.Book
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +20,8 @@ import javax.inject.Inject
 class BooksRepositoryImpl @Inject constructor(
     private val booksLocalDataSource: BooksLocalDataSource,
     private val booksRemoteDataSource: BooksRemoteDataSource,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
+    @ApplicationContext private val appContext: Context
 ): BooksRepository {
 
     override fun getBooks(): Flow<Resource<List<Book>>> =
@@ -33,7 +37,7 @@ class BooksRepositoryImpl @Inject constructor(
             try {
                 updateBooks()
             } catch (e: Exception) {
-                emit(Resource.error("La peticion fallo", e))
+                emit(Resource.error(appContext.getString(R.string.http_request_error_message), e))
             }
 
             emitAll(dbFlow)

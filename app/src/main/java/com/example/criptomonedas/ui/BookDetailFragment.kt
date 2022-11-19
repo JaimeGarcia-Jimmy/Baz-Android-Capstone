@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.criptomonedas.Constants
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.databinding.FragmentBookDetailBinding
 import com.example.criptomonedas.ui.adapters.AskAdapter
@@ -36,7 +37,7 @@ class BookDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentBookDetailBinding.inflate(inflater, container, false)
-        val uri = "android.resource://com.example.criptomonedas/drawable/" + args.bookId?.substringBefore('_')
+        val uri = Constants.BOOK_ICONS_DIRECTORY + args.bookId?.substringBefore('_')
         Glide.with(requireActivity()).load(Uri.parse(uri)).into(binding.ivBookDetail)
         binding.tvBookId.text = args.bookId
         binding.rvAsks.adapter = askAdapter
@@ -56,9 +57,9 @@ class BookDetailFragment : Fragment() {
                     ).show()
                     is Resource.Loading -> null
                     is Resource.Success -> {
-                        binding.tvLastValue.text = "Last: ${it.data.last}"
-                        binding.tvHighValue.text = "High: ${it.data.high}"
-                        binding.tvLowValue.text = "Low: ${it.data.low}"
+                        binding.tvLastValue.text = "${it.data.last}"
+                        binding.tvHighValue.text = "${it.data.high}"
+                        binding.tvLowValue.text = "${it.data.low}"
                     }
                 }
             }

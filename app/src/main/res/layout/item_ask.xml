@@ -6,26 +6,46 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tvAskPrice"
+        android:id="@+id/tvAskPriceLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Price:"
+        android:text="@string/tv_ask_price_label"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAskPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/tvAskPriceLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvAskPriceLabel"
+        app:layout_constraintBottom_toBottomOf="@+id/tvAskPriceLabel"/>
+
+    <TextView
+        android:id="@+id/tvAskAmountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/tv_ask_amount_label"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/tvAskPrice"
+        app:layout_constraintTop_toTopOf="@+id/tvAskPrice"
+        app:layout_constraintBottom_toBottomOf="@+id/tvAskPrice"/>
 
     <TextView
         android:id="@+id/tvAskAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Amount:"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/tvAskPrice"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/tvAskAmountLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvAskAmountLabel"
+        app:layout_constraintBottom_toBottomOf="@+id/tvAskAmountLabel"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -34,6 +54,7 @@
         android:background="#424040"
         android:orientation="horizontal"
         android:visibility="visible"
+        android:outlineSpotShadowColor="@color/black"
         app:layout_constraintGuide_begin="34dp"
         app:layout_constraintGuide_end="36dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

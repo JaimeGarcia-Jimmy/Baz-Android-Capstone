@@ -1,5 +1,6 @@
 package com.example.criptomonedas.di
 
+import com.example.criptomonedas.Constants
 import com.example.criptomonedas.data.api.LoggingInterceptor
 import com.example.criptomonedas.data.api.services.BooksService
 import dagger.Module
@@ -34,7 +35,7 @@ object NetworkModule {
     fun provideRetrofit(retrofitClient: OkHttpClient, rxJava3CallAdapterFactory: RxJava3CallAdapterFactory): Retrofit {
         return Retrofit.Builder()
             .client(retrofitClient)
-            .baseUrl("https://api.bitso.com/v3/")
+            .baseUrl(Constants.BITSO_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(rxJava3CallAdapterFactory)
             .build()

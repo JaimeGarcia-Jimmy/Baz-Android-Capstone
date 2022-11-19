@@ -17,8 +17,8 @@ class AskAdapter(
         private val binding = ItemAskBinding.bind(itemView)
 
         fun bind(ask: Ask) {
-            binding.tvAskPrice.text = "Price: ${ask.price}"
-            binding.tvAskAmount.text = "Amount: ${ask.amount}"
+            binding.tvAskPrice.text = "${ask.price}"
+            binding.tvAskAmount.text = "${ask.amount}"
         }
     }
 

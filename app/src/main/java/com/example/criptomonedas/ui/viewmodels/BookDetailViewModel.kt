@@ -1,7 +1,9 @@
 package com.example.criptomonedas.ui.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.criptomonedas.R
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.data.entities.Ask
 import com.example.criptomonedas.data.entities.Bid
@@ -9,6 +11,7 @@ import com.example.criptomonedas.data.entities.Book
 import com.example.criptomonedas.data.repositories.BookOrdersRepository
 import com.example.criptomonedas.data.repositories.BookOrdersRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class BookDetailViewModel @Inject constructor(
     private val bookOrdersRepository: BookOrdersRepository,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
+    @ApplicationContext private val appContext: Context
 ) : ViewModel() {
 
     private var _bookId: String = ""
@@ -64,7 +68,7 @@ class BookDetailViewModel @Inject constructor(
                 bookOrdersRepository.updateAsks(_bookId)
                 bookOrdersRepository.updateBids(_bookId)
             } catch (e: Exception) {
-                _asks.value = Resource.error("Error al actualizar", e)
+                _asks.value = Resource.error(appContext.getString(R.string.view_update_error_message), e)
             }
         }
     }
