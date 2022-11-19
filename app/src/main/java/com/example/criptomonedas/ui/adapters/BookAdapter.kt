@@ -4,6 +4,8 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.criptomonedas.Constants
@@ -12,9 +14,8 @@ import com.example.criptomonedas.data.entities.Book
 import com.example.criptomonedas.databinding.ItemBookBinding
 
 class BookAdapter(
-    val booksList: MutableList<Book>,
     val onClick: (bookId: String) -> Unit
-) : RecyclerView.Adapter<BookAdapter.ViewHolder>() {
+) : ListAdapter<Book, BookAdapter.ViewHolder>(BookDiffCallback) {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -30,6 +31,17 @@ class BookAdapter(
         }
     }
 
+    object BookDiffCallback : DiffUtil.ItemCallback<Book>() {
+        override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
+            return oldItem.bookId == newItem.bookId
+        }
+
+        override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_book, parent, false)
@@ -37,10 +49,6 @@ class BookAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(booksList[position])
-    }
-
-    override fun getItemCount(): Int {
-        return booksList.size
+        holder.bind(getItem(position))
     }
 }

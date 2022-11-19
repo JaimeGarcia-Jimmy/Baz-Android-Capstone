@@ -23,7 +23,7 @@ class AvailableBooksFragment : Fragment() {
     private var _binding: FragmentAvailableBooksBinding? = null
     private val binding: FragmentAvailableBooksBinding get() = _binding!!
     private val viewModel: AvailableBooksViewModel by viewModels<AvailableBooksViewModel>()
-    private val adapter = BookAdapter(mutableListOf()) { bookId -> openBookDetail(bookId) }
+    private val adapter = BookAdapter() { bookId -> openBookDetail(bookId) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,9 +44,7 @@ class AvailableBooksFragment : Fragment() {
                     ).show()
                     is Resource.Loading -> binding.swipeBooks.isRefreshing = true
                     is Resource.Success -> {
-                        adapter.booksList.clear()
-                        adapter.booksList.addAll(it.data)
-                        binding.rvBooks.adapter?.notifyDataSetChanged()
+                        adapter.submitList(it.data)
                     }
                 }
             }

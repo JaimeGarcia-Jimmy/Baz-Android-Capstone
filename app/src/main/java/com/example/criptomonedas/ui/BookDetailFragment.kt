@@ -28,8 +28,8 @@ class BookDetailFragment : Fragment() {
     private val binding: FragmentBookDetailBinding get() = _binding!!
     private val args: BookDetailFragmentArgs by navArgs()
     private val viewModel: BookDetailViewModel by viewModels()
-    private val askAdapter = AskAdapter(mutableListOf())
-    private val bidAdapter = BidAdapter(mutableListOf())
+    private val askAdapter = AskAdapter()
+    private val bidAdapter = BidAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,9 +76,7 @@ class BookDetailFragment : Fragment() {
                     ).show()
                     is Resource.Loading -> null
                     is Resource.Success -> {
-                        askAdapter.asksList.clear()
-                        askAdapter.asksList.addAll(it.data)
-                        binding.rvAsks.adapter?.notifyDataSetChanged()
+                        askAdapter.submitList(it.data)
                     }
                 }
             }
@@ -95,9 +93,7 @@ class BookDetailFragment : Fragment() {
                     ).show()
                     is Resource.Loading -> null
                     is Resource.Success -> {
-                        bidAdapter.bidsList.clear()
-                        bidAdapter.bidsList.addAll(it.data)
-                        binding.rvBids.adapter?.notifyDataSetChanged()
+                        bidAdapter.submitList(it.data)
                     }
                 }
             }
