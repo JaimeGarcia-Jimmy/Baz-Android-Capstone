@@ -14,7 +14,8 @@
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        app:srcCompat="@android:drawable/ic_menu_gallery"
+        android:contentDescription="@string/book_icon_content_description" />
 
     <TextView
         android:id="@+id/tvBookId"
@@ -22,44 +23,74 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="BookId"
+        android:text="@string/tv_book_id_placeholder"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/ivBookDetail"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvLastValue"
+        android:id="@+id/tvLastValueLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:text="Last:"
+        android:text="@string/tv_last_value_label"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/ivBookDetail"
         app:layout_constraintTop_toBottomOf="@+id/tvBookId" />
 
     <TextView
-        android:id="@+id/tvHighValue"
+        android:id="@+id/tvLastValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tvLastValueLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvLastValueLabel"
+        app:layout_constraintBottom_toBottomOf="@id/tvLastValueLabel"/>
+
+    <TextView
+        android:id="@+id/tvHighValueLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:text="High:"
+        android:text="@string/tv_high_value_label"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/ivBookDetail"
-        app:layout_constraintTop_toBottomOf="@+id/tvLastValue" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLastValueLabel" />
+
+    <TextView
+        android:id="@+id/tvHighValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tvHighValueLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvHighValueLabel"
+        app:layout_constraintBottom_toBottomOf="@id/tvHighValueLabel"/>
+
+    <TextView
+        android:id="@+id/tvLowValueLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/tv_low_value_label"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/ivBookDetail"
+        app:layout_constraintTop_toBottomOf="@+id/tvHighValueLabel" />
 
     <TextView
         android:id="@+id/tvLowValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:text="Low:"
+        android:layout_marginStart="8dp"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/ivBookDetail"
-        app:layout_constraintTop_toBottomOf="@+id/tvHighValue" />
+        app:layout_constraintStart_toEndOf="@+id/tvLowValueLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvLowValueLabel"
+        app:layout_constraintBottom_toBottomOf="@id/tvLowValueLabel"/>
 
     <TextView
         android:id="@+id/tvAsks"
@@ -67,24 +98,26 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="Asks"
+        android:text="@string/tv_asks_label"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLowValue" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLowValueLabel" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAsks"
-        tools:listitem="@layout/item_ask"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="0dp"
         android:layout_height="160dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:backgroundTint="#918E8E"
+        android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAsks" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAsks"
+        tools:listitem="@layout/item_ask" />
 
     <TextView
         android:id="@+id/tvBids"
@@ -92,7 +125,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="Bids"
+        android:text="@string/tv_bids_label"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,15 +133,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBids"
-        tools:listitem="@layout/item_bid"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="0dp"
         android:layout_height="160dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:backgroundTint="#918E8E"
+        android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvBids" />
+        app:layout_constraintTop_toBottomOf="@+id/tvBids"
+        tools:listitem="@layout/item_bid" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

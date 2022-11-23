@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Criptomonedas</string>
+    <string name="tv_book_id_placeholder">BookId</string>
+    <string name="tv_last_value_label">Last:</string>
+    <string name="tv_high_value_label">High:</string>
+    <string name="tv_low_value_label">Low:</string>
+    <string name="tv_asks_label">Asks</string>
+    <string name="tv_bids_label">Bids</string>
+    <string name="book_icon_content_description">Book Icon</string>
+    <string name="tv_ask_price_label">Price:</string>
+    <string name="tv_ask_amount_label">Amount:</string>
+    <string name="http_request_error_message">Request Failed</string>
+    <string name="view_update_error_message">Update Failed</string>
 </resources>

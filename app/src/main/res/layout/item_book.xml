@@ -12,13 +12,14 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/book_icon_content_description" />
 
     <TextView
         android:id="@+id/tv_book"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Moneda"
+        android:text="@string/tv_book_id_placeholder"
         android:textStyle="bold"
         android:textSize="20sp"
         android:layout_marginHorizontal="24dp"

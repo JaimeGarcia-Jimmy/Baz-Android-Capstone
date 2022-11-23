@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.criptomonedas.Constants
 import com.example.criptomonedas.data.Resource
 import com.example.criptomonedas.databinding.FragmentBookDetailBinding
 import com.example.criptomonedas.ui.adapters.AskAdapter
@@ -21,14 +22,14 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class BookDetailFragment: Fragment() {
+class BookDetailFragment : Fragment() {
 
     private var _binding: FragmentBookDetailBinding? = null
     private val binding: FragmentBookDetailBinding get() = _binding!!
     private val args: BookDetailFragmentArgs by navArgs()
     private val viewModel: BookDetailViewModel by viewModels()
-    private val askAdapter = AskAdapter( mutableListOf() )
-    private val bidAdapter = BidAdapter( mutableListOf() )
+    private val askAdapter = AskAdapter()
+    private val bidAdapter = BidAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,68 +37,67 @@ class BookDetailFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentBookDetailBinding.inflate(inflater, container, false)
-        val uri = "android.resource://com.example.criptomonedas/drawable/"+args.bookId?.substringBefore('_')
+        val uri = Constants.BOOK_ICONS_DIRECTORY + args.bookId?.substringBefore('_')
         Glide.with(requireActivity()).load(Uri.parse(uri)).into(binding.ivBookDetail)
         binding.tvBookId.text = args.bookId
         binding.rvAsks.adapter = askAdapter
         binding.rvBids.adapter = bidAdapter
 
-        //Start viewmodel flows
+        // Start viewmodel flows
         viewModel.getBookById(args.bookId!!)
 
-        //Collect Book Details
+        // Collect Book Details
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.book.collect() {
-                when(it) {
+                when (it) {
                     is Resource.Error -> Toast.makeText(
-                        activity, it.message, Toast.LENGTH_LONG
+                        activity,
+                        it.message,
+                        Toast.LENGTH_LONG
                     ).show()
                     is Resource.Loading -> null
                     is Resource.Success -> {
-                        binding.tvLastValue.text = "Last: ${it.data.last}"
-                        binding.tvHighValue.text = "High: ${it.data.high}"
-                        binding.tvLowValue.text = "Low: ${it.data.low}"
+                        binding.tvLastValue.text = "${it.data.last}"
+                        binding.tvHighValue.text = "${it.data.high}"
+                        binding.tvLowValue.text = "${it.data.low}"
                     }
                 }
-
             }
         }
 
-        //Collect Book Asks
+        // Collect Book Asks
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.asks.collect() {
-                when(it) {
+                when (it) {
                     is Resource.Error -> Toast.makeText(
-                        activity, it.message, Toast.LENGTH_LONG
+                        activity,
+                        it.message,
+                        Toast.LENGTH_LONG
                     ).show()
                     is Resource.Loading -> null
                     is Resource.Success -> {
-                        askAdapter.asksList.clear()
-                        askAdapter.asksList.addAll(it.data)
-                        binding.rvAsks.adapter?.notifyDataSetChanged()
+                        askAdapter.submitList(it.data)
                     }
                 }
             }
         }
 
-        //Collect Book Bids
+        // Collect Book Bids
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.bids.collect() {
-                when(it) {
+                when (it) {
                     is Resource.Error -> Toast.makeText(
-                        activity, it.message, Toast.LENGTH_LONG
+                        activity,
+                        it.message,
+                        Toast.LENGTH_LONG
                     ).show()
                     is Resource.Loading -> null
                     is Resource.Success -> {
-                        bidAdapter.bidsList.clear()
-                        bidAdapter.bidsList.addAll(it.data)
-                        binding.rvBids.adapter?.notifyDataSetChanged()
+                        bidAdapter.submitList(it.data)
                     }
                 }
             }
         }
-
-
 
         return binding.root
     }
@@ -106,5 +106,4 @@ class BookDetailFragment: Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

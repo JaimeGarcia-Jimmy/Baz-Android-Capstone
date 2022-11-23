@@ -6,26 +6,46 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tvBidPrice"
+        android:id="@+id/tvBidPriceLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Price:"
+        android:text="@string/tv_ask_price_label"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvBidPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/tvBidPriceLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvBidPriceLabel"
+        app:layout_constraintBottom_toBottomOf="@+id/tvBidPriceLabel"/>
+
+    <TextView
+        android:id="@+id/tvBidAmountLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/tv_ask_amount_label"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/tvBidPrice"
+        app:layout_constraintTop_toTopOf="@+id/tvBidPrice"
+        app:layout_constraintBottom_toBottomOf="@+id/tvBidPrice"/>
 
     <TextView
         android:id="@+id/tvBidAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/tvBidPrice"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/tvBidAmountLabel"
+        app:layout_constraintTop_toTopOf="@+id/tvBidAmountLabel"
+        app:layout_constraintBottom_toBottomOf="@+id/tvBidAmountLabel"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
